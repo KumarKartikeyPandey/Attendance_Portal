@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Space Attendance Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      height: 100vh;
+      background: black;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: #f8fafc;
+    }
+
+    .video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+    }
+
+    .video-background video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0.99;
+    }
+
+    .video-background .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .logo-left, .logo-right {
+      position: fixed;
+      z-index: 10;
+    }
+
+    .logo-left {
+      top: 20px;
+      left: 20px;
+    }
+
+    .logo-right {
+      top: 15px;
+      right: 15px;
+    }
+
+    .logo-left img {
+      height: 70px;
+      width: auto;
+    }
+
+    .logo-right img {
+      height: 110px;
+      width: auto;
+    }
+
+    .stars, .twinkling {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      display: block;
+    }
+
+    .stars {
+      background: url('https://i.imgur.com/1VWnDDA.png') repeat;
+      animation: moveStars 100s linear infinite;
+      z-index: -2;
+    }
+
+    .twinkling {
+      background: url('https://i.imgur.com/M5vjvZ8.png') repeat;
+      animation: twinkle 200s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 5000px; }
+    }
+
+    @keyframes twinkle {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 5000px; }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      background: transparent;
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+      overflow: hidden;
+      width: 90%;
+      max-width: 1000px;
+      height: 80%;
+      max-height: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-side, .camera-side {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-title {
+      font-size: 2rem;
+      color: #38bdf8;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #f8fafc;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      border-color: #38bdf8;
+      background-color: #0f172a;
+      outline: none;
+    }
+
+    .form-buttons {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #38bdf8;
+      border: none;
+      color: #0f172a;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+      margin: 0 5px;
+    }
+
+    button:hover {
+      background-color: #0ea5e9;
+      transform: scale(1.05);
+    }
+
+    .camera-preview {
+      height: 100%;
+      border-radius: 12px;
+      border: 2px dashed #38bdf8;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0f172a;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* Review container styles */
+    .review-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      border-radius: 16px;
+      padding: 30px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .review-title {
+      font-size: 1.8rem;
+      color: #38bdf8;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .review-content {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .review-info {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .review-photo {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .info-item {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    .info-label {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      color: #f8fafc;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .review-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .photo-frame {
+      border: 2px solid #38bdf8;
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 100%;
+      max-height: 300px;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      
+      .form-side, .camera-side {
+        padding: 20px;
+      }
+      
+      .camera-side {
+        height: 300px;
+      }
+
+      .review-content {
+        flex-direction: column;
+      }
+
+      .review-info, .review-photo {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- Logos at top corners -->
+    <div class="logo-left">
+        <img src="{{ url_for('static', filename='assets/ncs-logo.svg') }}" alt="Logo Left">
+    </div>
+    <div class="logo-right">
+        <img src="{{ url_for('static', filename='assets/jsslogoicon.png') }}" alt="Logo Right">
+    </div>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='assets/register_video.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="overlay"></div>
+    </div>
+    
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <div class="container">
+        <div class="form-side">
+            <h1 class="form-title">WORKSHOP ATTENDANCE PORTAL</h1>
+            <form id="regForm" enctype="multipart/form-data" autocomplete="off">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Full Name" required />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="roll" placeholder="Roll Number" required />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="branch" placeholder="Branch" required />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="section" placeholder="Section" required />
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email ID" required />
+                </div>
+                <div class="form-buttons">
+                    <button type="button" onclick="takePhoto()">📸 Capture & Review</button>
+                </div>
+            </form>
+        </div>
+        <div class="camera-side">
+            <div class="camera-preview">
+                <video id="video" autoplay></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+            </div>
+        </div>
+
+        <!-- Review Container -->
+        <div id="reviewContainer" class="review-container">
+            <h2 class="review-title">🚀 Review Your Information</h2>
+            <div class="review-content">
+                <div class="review-info">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <div id="previewName" class="info-value">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Roll Number</div>
+                        <div id="previewRoll" class="info-value">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Branch</div>
+                        <div id="previewBranch" class="info-value">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Section</div>
+                        <div id="previewSection" class="info-value">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email ID</div>
+                        <div id="previewEmail" class="info-value">-</div>
+                    </div>
+                </div>
+                <div class="review-photo">
+                    <div class="photo-frame">
+                        <img id="photoPreview" alt="Your photo">
+                    </div>
+                </div>
+            </div>
+            <div class="review-actions">
+                <button type="button" onclick="cancelReview()">🔙 Back to Form</button>
+                <button type="button" id="confirmSubmitBtn">✅ Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

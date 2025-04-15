@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-repeat: no-repeat;
+  color: white;
+  background-size: fixed;
+}
+
+.video-background {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0.99;
+}
+
+.video-background .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+.video-background .content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-align: center;
+  padding-top: 20vh;
+}
+
+.logo-left{
+    position: fixed;
+    top: 20px;
+    z-index: 10;
+}
+
+.logo-right{
+    position:fixed;
+    top:15px;
+    z-index:10;
+}
+.logo-left {
+    left: 20px;
+}
+
+.logo-right {
+    right: 15px;
+}
+
+.logo-left img, .logo-right img {
+    height: 70px;
+    width: auto;
+}
+
+.logo-right img {
+    height: 110px;
+    width: auto;
+}
+
+/* Container for the boxes */
+.login-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  max-width: 1200px;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.box {
+  background-color: transparent;
+  width: 40%;
+  max-width: 530px;
+  height: 500px;
+  perspective: 1000px;
+  position: relative;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+.box-content {
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 25px;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  padding: 30px 20px;
+}
+
+.image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.image-container img {
+  max-width: 80%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.btn {
+  height: 3.2rem;
+  width: 100%;
+  max-width: 27rem;
+  margin: 15px 15px 0 15px;
+  padding: 10px;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  background: white;
+  color: black;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-0.4rem);
+}
+
+.btn-register {
+  background: white;
+  color: black;
+}
+
+.btn-download {
+  background: white;
+  color: black;
+}
+
+.box-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.description {
+  font-size: 1rem;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    padding: 100px 0;
+  }
+  
+  .box {
+    width: 90%;
+    max-width: 450px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .box {
+    width: 95%;
+  }
+
+  .btn {
+    width: 90%;
+    font-size: 1.2rem;
+  }
+  
+  .box-title {
+    font-size: 1.5rem;
+  }
+}
+    </style>
+
+    <title>Attendance Portal</title>
+    
+</head>
+
+<body>
+    <!-- Logos at top corners -->
+    <div class="logo-left">
+        <img src="{{ url_for('static', filename='assets/ncs-logo.svg') }}" alt="Logo Left">
+    </div>
+    <div class="logo-right">
+        <img src="{{ url_for('static', filename='assets/jsslogoicon.png') }}" alt="Logo Right">
+    </div>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='assets/home_video.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="overlay"></div>
+    </div>
+
+    <!-- Container for the two boxes -->
+    <div class="login-container">
+        <!-- Left Box - Register Section -->
+        <div class="box">
+            <div class="box-title">MARK ATTENDANCE</div>
+            <div class="flip-card-inner">
+                <div class="box-content">
+                    <div class="image-container">
+                        <img src="{{ url_for('static', filename='assets/register.png') }}" alt="Student Image">
+                    </div>
+                    <div class="description">
+                        Mark attendance for the workshop through portal
+                    </div>
+                    <div class="button-container">
+                        <a href="{{ url_for('register') }}" class="btn btn-register">REGISTER</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Box - Faculty Section -->
+        <div class="box">
+            <div class="box-title">EXTRACT FILE</div>
+            <div class="flip-card-inner">
+                <div class="box-content">
+                    <div class="image-container">
+                        <img src="{{ url_for('static', filename='assets/download.png') }}" alt="Faculty Image">
+                    </div>
+                    <div class="description">
+                        Export attendance sheet for authority approval and signature
+                    </div>
+                    <div class="button-container">
+                        <a href="{{ url_for('download') }}" class="btn btn-download">DOWNLOAD PDF</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
